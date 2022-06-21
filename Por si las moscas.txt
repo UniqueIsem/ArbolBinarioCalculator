@@ -1,0 +1,126 @@
+#include "Arbol.h"
+
+int main() {
+	Arbol a;
+	a.menu();
+}
+----------------------------------------------------------------------------------
+#include "Arbol.h"
+
+void Arbol::menu() {
+	while (menuOption != 2) {
+		cout << endl;
+		cout << "------------MENU---------------" << endl;
+		cout << "- 1. Ingresar operacion -------" << endl;
+		cout << "- 2. Salir del programa -------" << endl;
+		cout << "-------------------------------" << endl;
+		cout << "Inrgese la opcion que desea realizar: ";
+		cin >> menuOption;
+		cout << endl;
+		switch (menuOption) {
+		case 1: startProgram();
+			break;
+		case 2: system("cls");
+			cout << "Adios" << endl;
+			system("pause");
+		default: system("cls");
+			cout << "Opcion inexistente...vuelva a intentarlo" << endl;
+			break;
+		}
+	}
+}
+
+
+void Arbol::startProgram() {
+	system("cls");
+	//aqui va la funcion mostrar arbol
+	cout << "NOTA: cuando termine de escribir su operacion presione 'z'" << endl;
+	cout << "INGRESE UN DIGITO: ";
+	cin >> operacion;
+	insertar(tree, operacion[pos]);
+}
+----------------------------------------------------------------------------------
+#pragma once
+#include "Nodo.h"
+
+class Arbol : public Nodo{
+private:
+	int menuOption;
+public:
+	void menu();
+	void startProgram();
+};
+
+----------------------------------------------------------------------------------
+//el plan es tokenizar una cadena guardandola dentro de un vector para darle una posicion a los caracteres dentro de la cadena
+#include "Nodo.h"
+
+Nodo* crearNodo(char c) {
+		Nodo* nuevoNodo = new Nodo();
+		nuevoNodo->operacion = c;
+		nuevoNodo->der = NULL;
+		nuevoNodo->izq = NULL;
+		return nuevoNodo;
+}
+
+void Nodo::insertar(Nodo*& tree, char c) {
+	if (tree == NULL) {
+		Nodo* nuevoNodo = crearNodo(c);
+		tree = nuevoNodo;
+	}
+	else if(tree->izq == NULL) {
+		insertar(tree->izq, c);
+	}
+	else if (tree->izq != NULL) {
+		insertar(tree->der, c);
+	}
+	while (operacion[pos] != NULL) { //hace un bucle donde aumenta la posicion de los caracteres de la cadena operacion hasta que llegue al final
+		if (operacion[pos] == '(') { //si detecta la apertura de un parentesis crea un nodo
+			insertar(tree, c);
+		}
+		else if (operacion[pos] == numero) {
+			insertar(tree, c);
+			insertar(tree, c);
+		}
+		else if ((operacion[pos] == suma) || (operacion[pos] == resta) || (operacion[pos] == mult) || (operacion[pos] == div)) {
+			cout << "Regresar un nodo e insertar operador" << endl;
+			//insertar(operador)
+		}
+		else if (operacion[pos] == ')') {
+			cout << "Regresar un nodo" << endl;
+		}
+		pos++;
+	}
+}
+
+/*void Nodo::tokenizar(char c) {
+
+}*/
+----------------------------------------------------------------------------------
+#pragma once
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+
+class Nodo {
+public:
+	int pos = 0;
+	int longitud = operacion.size();
+	string operacion; //cambiamos char operacion[50] por string operacion
+	char parentesis1 = '(';
+	char parentesis2 = ')';
+	int numero = 1 && 2 && 3 && 4 && 5 && 6 && 7 && 8 && 9 && 0;
+	char suma = '+';
+	char resta = '-';
+	char mult = '*';
+	char div = '/';
+	Nodo* tree = NULL;
+	Nodo* der;
+	Nodo* izq;
+public:
+	Nodo* crearNodo(char);
+	void insertar(Nodo*&, char); 
+	//void tokenizar(char);
+};
